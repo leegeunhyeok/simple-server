@@ -1,7 +1,9 @@
 <template>
   <transition name="menu" mode="out-in">
     <div id="header-menu">
-      menu
+      <div class="menu-item" @click="$emit('menuClick', 'home')">홈</div>
+      <div class="menu-item" @click="$emit('menuClick', 'log')">로그</div>
+      <div class="menu-item" @click="$emit('menuClick', 'info')">정보</div>
     </div>
   </transition>
 </template>
@@ -12,7 +14,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
+@import "@/common.scss";
 
 #header-menu {
   position: fixed;
@@ -20,6 +24,22 @@ export default {
   width: 200px;
   height: 100%;
   right: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 9998;
+
+  .menu-item {
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 10px;
+    transition: $transition-duration;
+    margin-bottom: 10px;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
 }
 
 

@@ -1,6 +1,10 @@
 <template>
   <header>
-    <p>{{ title }}</p>
+    <transition name="fade" mode="out-in">
+      <!-- 상단에도 fade 효과를 주기 위해 2개 요소로 나눔 -->
+      <p key="1" v-if="titleToggle">{{ title }}</p>
+      <p key="2" v-else>{{ title }}</p>
+    </transition>
     <div id="header-menu-button" @click="headerMenu">
       <transition name="fade" mode="out-in">
         <fa-icon v-if="open" key="close" icon="times"/>
@@ -14,6 +18,16 @@
 export default {
   name: 'app-header',
   props: ['title', 'open'],
+  data () {
+    return {
+      titleToggle: false
+    }
+  },
+  watch: {
+    title (newVal, oldVal) {
+      this.titleToggle = !this.titleToggle
+    }
+  },
   methods: {
     headerMenu () {
       this.$emit('menu')
@@ -31,7 +45,7 @@ header {
   position: relative;
   width: 100%;
   height: $height;
-  background-color: #2b579a;
+  background-color: $main;
   color: #fff;
   line-height: $height;
   font-size: 20px;
@@ -48,7 +62,7 @@ header {
     transition: $transition-duration;
 
     &:hover {
-      background-color: #22457b;
+      background-color: $main;
     }
   }
 }
