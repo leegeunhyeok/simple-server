@@ -11,6 +11,16 @@ export default new Router({
       component: require('@/components/MainPage').default
     },
     {
+      path: '/information',
+      name: 'info',
+      component: require('@/components/InfoPage').default
+    },
+    {
+      path: '/log',
+      name: 'log',
+      component: require('@/components/LogPage').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

@@ -64,6 +64,10 @@ header {
     &:hover {
       background-color: $main;
     }
+
+    * {
+      cursor: pointer;
+    }
   }
 }
 

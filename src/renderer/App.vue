@@ -1,26 +1,32 @@
 <template>
   <div id="app">
+    <app-alert :message="message" v-if="alertOpen"/>
     <app-header :title="title" :open="menuOpen" @menu="menuToggle"/>
     <app-header-menu v-show="menuOpen" @menuClick="menuClick($event)"/>
-    <router-view @serverToggle="serverToggle($event)"/>
+    <router-view @serverToggle="serverToggle($event)" @alert="alert($event)"/>
   </div>
 </template>
 
 <script>
+
+import Alert from '@/components/Alert.vue'
 import Header from '@/components/Header.vue'
 import Headermenu from '@/components/HeaderMenu.vue'
 
 export default {
   name: 'app',
   components: {
+    'app-alert': Alert,
     'app-header': Header,
     'app-header-menu': Headermenu
   },
   data () {
     return {
       title: '홈',
+      message: '',
+      alertOpen: false,
       menuOpen: false,
-      server: null
+      watingAlert: undefined
     }
   },
   created () {
@@ -40,34 +46,53 @@ export default {
     menuClick (path) {
       if (path === 'home') {
         this.title = '홈'
+        this.$router.push({ name: 'main' })
       } else if (path === 'log') {
         this.title = '로그'
+        this.$router.push({ name: 'log' })
       } else if (path === 'info') {
         this.title = '정보'
+        this.$router.push({ name: 'info' })
       } else {
         this.title = 'App'
       }
       this.menuOpen = false
     },
-    serverToggle (on) {
-      if (on) {
-        const express = require('express')
-        const app = express()
-
-        app.get('/', (req, res) => {
-          res.send('Hello!!!')
+    serverToggle () {
+      if (!this.$store.state.start) {
+        this.$store.dispatch('START', {
+          port: this.$store.state.port
+        }).then(() => {
+          this.$store.commit('SET_START_BUTTON_STATE', true)
+        }).catch(e => {
+          this.$store.commit('SET_START_BUTTON_STATE', false)
+          this.alert('서버를 시작할 수 없습니다')
         })
-
-        // TODO: 포트 지정한 데이터로 설정
-        this.server = app.listen(8080)
-
-        this.$store.commit('START_SERVER')
-        console.log('Listening')
       } else {
-        // TODO: 서버 닫히지 않는 문제 확인
-        this.server.close()
-        this.$store.commit('CLOSE_SERVER')
-        console.log('Server closed')
+        this.$store.dispatch('CLOSE')
+      }
+    },
+    alert (message) {
+      if (message) {
+        if (this.alertOpen) {
+          try {
+            clearTimeout(this.watingAlert)
+          } catch (e) { }
+          this.alertOpen = false
+          setTimeout(() => {
+            this.message = message
+            this.alertOpen = true
+            this.watingAlert = setTimeout(() => {
+              this.alertOpen = false
+            }, 2500)
+          }, 300)
+        } else {
+          this.alertOpen = true
+          this.message = message
+          this.watingAlert = setTimeout(() => {
+            this.alertOpen = false
+          }, 2500)
+        }
       }
     }
   }
@@ -128,7 +153,6 @@ html, body {
   }
 
   .hidden-content {
-    margin-top: 10px;
     max-height: 0;
     transition: max-height $transition-duration + 0.2 ease-out;
     overflow: hidden;
@@ -139,19 +163,10 @@ html, body {
       
       div {
         cursor: pointer;
-        transition: $transition-duration;
       }
 
       div:hover {
         color: $main;
-
-        &::before {
-          content: "";
-          color: #000;
-          margin-right: 10px;
-          border: 1px solid $main;
-          transition: $transition-duration;
-        }
       }
     }
   }
@@ -227,7 +242,7 @@ html, body {
   }
 }
 
-input[type=checkbox] {
+.toggle {
   position: fixed;
 	height: 0;
 	width: 0;
@@ -257,13 +272,17 @@ label:after {
 	transition: 0.3s;
 }
 
-input:checked + label {
+.toggle.checked + label {
 	background: #6a89b8;
 }
 
-input:checked + label:after {
+.toggle.checked + label:after {
 	left: calc(100% - 2px);
 	transform: translateX(-100%);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
 }
 
 </style>

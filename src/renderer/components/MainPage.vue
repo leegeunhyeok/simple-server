@@ -3,30 +3,33 @@
     <div class="card">
       <b>서버 정보</b>
       <div class="right-area">
-        <input type="checkbox" id="control" v-model="start" :disabled="starting">
-        <label for="control" :class="starting ? 'loading' : ''"></label>
+        <div id="control" :class="start ? 'toggle checked' : 'toggle'"></div>
+        <label for="control" @click="toggle"></label>
       </div>
       <div class="content">
         서버 상태
-        <div class="right-area" :class="serverStatus ? 'on' : (starting ? 'starting' : 'off')">
-          {{ serverStatus ? '작동 중' : (starting ? '시작 중' : '종료 됨') }}
+        <div class="right-area" :class="start ? 'on' : 'off'">
+          {{ start ? '실행 중' : '종료 됨' }}
           <fa-icon icon="circle"/>
         </div>
       </div>
       <div class="content">
         서버 URL
         <div class="right-area">
-          {{ serverStatus ? '보기' : '-' }}
+          <transition name="fade" mode="out-in">
+            <fa-icon icon="caret-down" v-if="start"/>
+            <fa-icon icon="times" v-else/>
+          </transition>
         </div>
-        <div class="hidden-content" v-show="port && serverStatus">
+        <div class="hidden-content" v-show="port && start">
           <div class="ip-area" v-if="port">
-            <div class="right-area">http://localhost{{ port === 80 ? '' : ':' + port }}</div>
+            <div class="right-area" @click="open">http://localhost{{ port === 80 ? '' : ':' + port }}</div>
           </div>
           <div class="ip-area" v-if="port">
-            <div class="right-area">http://127.0.0.1{{ port === 80 ? '' : ':' + port }}</div>
+            <div class="right-area" @click="open">http://127.0.0.1{{ port === 80 ? '' : ':' + port }}</div>
           </div>
           <div class="ip-area" v-if="$store.state.ip !== '127.0.0.1' && port">
-            <div class="right-area">http://{{ port === 80 ? $store.state.ip : $store.state.ip + ':' + port }}</div>
+            <div class="right-area" @click="open">http://{{ port === 80 ? $store.state.ip : $store.state.ip + ':' + port }}</div>
           </div>
         </div>
       </div>
@@ -36,16 +39,19 @@
     <div class="card">
       <b>기본 설정</b>
       <div class="content">
-        <button class="button default" @click="test = !test" :disabled="serverStatus">서버 경로 선택</button>
-        <div class="right-area">-</div>
+        <button class="button default" @click="chooseDirectory" :disabled="start">서버 경로 선택</button>
+      </div>
+      <div class="content" style="font-size: 14px; margin-bottom: 25px;">
+        <div>{{ dir ? dir : '-' }}</div>
       </div>
       <div class="content">
-        <input class="input" type="number" min="1" max="65535" placeholder="포트" v-model.number="port" :disabled="serverStatus">
+        <input class="input" type="number" min="1" max="65535" placeholder="포트" v-model.number="$store.state.port" :disabled="start">
         <div class="right-area">{{ port ? port : '-' }}</div>
       </div>
     </div>
     <div class="card">
       <b>고급 설정</b>
+      <div class="content">준비 중..</div>
     </div>
   </div>
 </template>
@@ -54,32 +60,45 @@
 
 export default {
   name: 'main-page',
-  data () {
-    return {
-      start: false,
-      starting: false,
-      port: undefined,
-      test: false
-    }
-  },
+  props: ['status'],
   computed: {
-    serverStatus () {
-      return this.$store.state.started
-    }
-  },
-  watch: {
-    start (newVal, oldVal) {
-      this.starting = newVal
-      this.$emit('serverToggle', newVal)
+    start () {
+      return this.$store.state.start
     },
-    serverStatus (newVal) {
-      if (!newVal) {
-        this.start = false
-      }
-      this.starting = false
+    port () {
+      return this.$store.state.port
+    },
+    dir () {
+      return this.$store.state.dir
     }
   },
   methods: {
+    toggle () {
+      if (!this.$store.state.start) {
+        if (!this.$store.state.dir) {
+          this.$emit('alert', '서버 디렉토리를 선택해주세요')
+          return
+        }
+        if (!this.$store.state.port) {
+          this.$emit('alert', '포트를 입력해주세요')
+          return
+        }
+        this.$emit('serverToggle')
+      } else {
+        this.$emit('serverToggle')
+      }
+    },
+    chooseDirectory () {
+      const dir = this.$electron.remote.dialog.showOpenDialog({
+        properties: ['openDirectory'],
+        title: '서버 디렉토리 선택'
+      })
+      if (dir) {
+        this.$store.commit('SET_DIRECTORY', dir[0])
+      } else {
+        this.$emit('alert', '디렉토리 오류')
+      }
+    },
     open (link) {
       this.$electron.shell.openExternal(link)
     }
@@ -104,16 +123,6 @@ export default {
 
 .off {
   color: $red;
-  transition: $transition-duration;
-}
-
-.loading {
-  cursor: not-allowed;
-  background-color: #b0bec5 !important;
-}
-
-.starting {
-  color: #ffb74d;
   transition: $transition-duration;
 }
 

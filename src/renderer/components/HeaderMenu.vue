@@ -42,7 +42,6 @@ export default {
   }
 }
 
-
 .menu-enter-active, .menu-leave-active {
   transition: .3s;
 }
@@ -50,4 +49,5 @@ export default {
 .menu-enter, .menu-leave-to {
   transform: translateX(200px);
 }
+
 </style>
