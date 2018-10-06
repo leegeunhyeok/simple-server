@@ -16,6 +16,7 @@ export default new Vuex.Store({
     ip: '',
     port: 8080,
     dir: '',
+    root: 'index.html',
     server: null
   },
   mutations: {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     SET_DIRECTORY (state, dir) {
       state.dir = dir
     },
+    SET_ROOT (state, root) {
+      state.root = root
+    },
     SET_START_BUTTON_STATE (state, on) {
       state.start = on
     },
@@ -45,15 +49,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    START ({ commit }, config) {
+    START ({ commit, state }) {
       commit('WRITE_LOG', 'Starting server..')
       return new Promise((resolve, reject) => {
         setImmediate(() => {
-          const server = new Server().start(config.port, '', () => {
+          const server = new Server().start(state.port, state.dir, state.root, () => {
             commit('START_SERVER', server)
             commit('WRITE_LOG', 'Server started')
           }, (method, url) => {
-            commit('WRITE_LOG', method + ' ' + url)
+            commit('WRITE_LOG', `${method} ${url}`)
           })
 
           if (server['listening']) {
@@ -65,12 +69,12 @@ export default new Vuex.Store({
         })
       })
     },
-    CLOSE (context) {
-      context.commit('WRITE_LOG', 'Closing server..')
+    CLOSE ({ commit, state }) {
+      commit('WRITE_LOG', 'Closing server..')
       setImmediate(() => {
-        context.state.server.shutdown(() => {
-          context.commit('WRITE_LOG', 'Server closed')
-          context.commit('CLOSE_SERVER')
+        state.server.shutdown(() => {
+          commit('WRITE_LOG', 'Server closed')
+          commit('CLOSE_SERVER')
         })
       })
     }

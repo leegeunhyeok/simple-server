@@ -2,7 +2,7 @@
   <div id="info">
     <img src="@/assets/logo.png">
     <h2>Simple Server</h2>
-    <b>v0.0.1</b>
+    <b>Beta v0.0.1</b>
     <div class="items">
       <div class="item">
         Vue.js: <b class="version">{{ vue }}</b>
@@ -92,7 +92,7 @@ export default {
   }
 
   #developer {
-    margin-top: 20px;
+    margin-top: 40px;
     width: 100%;
   }
 }
@@ -115,7 +115,7 @@ export default {
   }
 
   25% {
-    color: gold;
+    color: orange;
   }
 
   50% {

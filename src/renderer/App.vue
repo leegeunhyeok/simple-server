@@ -60,9 +60,7 @@ export default {
     },
     serverToggle () {
       if (!this.$store.state.start) {
-        this.$store.dispatch('START', {
-          port: this.$store.state.port
-        }).then(() => {
+        this.$store.dispatch('START').then(() => {
           this.$store.commit('SET_START_BUTTON_STATE', true)
         }).catch(e => {
           this.$store.commit('SET_START_BUTTON_STATE', false)
@@ -209,12 +207,13 @@ html, body {
 }
 
 .input[type=text], input[type=number] {
-  cursor: pointer;
+  cursor: text;
   border: none;
   outline: none;
   padding: 5px 10px;
   width: 100px;
   border-bottom: 2px solid #ddd;
+  margin-bottom: 5px;
   transition: $transition-duration;
 
   &:hover {

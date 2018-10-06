@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "author": "leegeunhyeok <lghlove0509@naver.com>",
   "description": "You can create simple web server",
-  "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -22,7 +21,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "simple-server",
+    "productName": "Simple Server",
     "appId": "com.leegeunhyeok.simple-server",
     "directories": {
       "output": "build"
@@ -49,7 +48,16 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
       "icon": "build/icons"

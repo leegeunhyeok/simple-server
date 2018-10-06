@@ -23,13 +23,19 @@
         </div>
         <div class="hidden-content" v-show="port && start">
           <div class="ip-area" v-if="port">
-            <div class="right-area" @click="open">http://localhost{{ port === 80 ? '' : ':' + port }}</div>
+            <div class="right-area" @click="open('http://localhost' + (port === 80 ? '' : ':' + port))">
+              http://localhost{{ port === 80 ? '' : ':' + port }}
+            </div>
           </div>
           <div class="ip-area" v-if="port">
-            <div class="right-area" @click="open">http://127.0.0.1{{ port === 80 ? '' : ':' + port }}</div>
+            <div class="right-area" @click="open('http://127.0.0.1' + (port === 80 ? '' : ':' + port))">
+              http://127.0.0.1{{ port === 80 ? '' : ':' + port }}
+            </div>
           </div>
           <div class="ip-area" v-if="$store.state.ip !== '127.0.0.1' && port">
-            <div class="right-area" @click="open">http://{{ port === 80 ? $store.state.ip : $store.state.ip + ':' + port }}</div>
+            <div class="right-area" @click="open('http://' + (port === 80 ? $store.state.ip : $store.state.ip + ':' + port))">
+              http://{{ port === 80 ? $store.state.ip : $store.state.ip + ':' + port }}
+            </div>
           </div>
         </div>
       </div>
@@ -39,24 +45,33 @@
     <div class="card">
       <b>기본 설정</b>
       <div class="content">
-        <button class="button default" @click="chooseDirectory" :disabled="start">서버 경로 선택</button>
+        <button class="button default" @click="chooseDirectory" :disabled="start">서버 디렉토리 선택</button>
       </div>
       <div class="content" style="font-size: 14px; margin-bottom: 25px;">
         <div>{{ dir ? dir : '-' }}</div>
       </div>
       <div class="content">
-        <input class="input" type="number" min="1" max="65535" placeholder="포트" v-model.number="$store.state.port" :disabled="start">
-        <div class="right-area">{{ port ? port : '-' }}</div>
+        포트
+        <div class="right-area" style="margin-top: 0px;">
+          <input class="input" type="number" min="1" max="65535" placeholder="포트" v-model.number="$store.state.port" :disabled="start">
+        </div>
       </div>
     </div>
     <div class="card">
       <b>고급 설정</b>
-      <div class="content">준비 중..</div>
+      <div class="content">
+        홈 파일 명
+        <div class="right-area" style="margin-top: 0px;">
+          <input type="text" class="input" placeholder="/" v-model.trim="$store.state.root" :disabled="start">
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+const fs = require('fs')
 
 export default {
   name: 'main-page',
@@ -93,13 +108,25 @@ export default {
         properties: ['openDirectory'],
         title: '서버 디렉토리 선택'
       })
+
       if (dir) {
-        this.$store.commit('SET_DIRECTORY', dir[0])
-      } else {
-        this.$emit('alert', '디렉토리 오류')
+        fs.readdir(dir[0], (err, list) => {
+          if (err) {
+            this.$emit('alert', '디렉토리를 읽을 수 없습니다')
+          } else {
+            if (list.length === 0) {
+              this.$emit('alert', '디렉토리가 비어있습니다')
+            }
+            // if (!list.some(el => el === 'index.html')) {
+            //   this.$emit('alert', '디렉토리에 index.html이 없습니다')
+            // }
+            this.$store.commit('SET_DIRECTORY', dir[0])
+          }
+        })
       }
     },
     open (link) {
+      console.log(link)
       this.$electron.shell.openExternal(link)
     }
   }

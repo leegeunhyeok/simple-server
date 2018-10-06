@@ -5,7 +5,7 @@
       <div class="content">
         모두 지우기
         <div class="right-area" style="margin-top: 0px">
-          <button class="button red">
+          <button class="button red" @click="clear">
             <fa-icon icon="trash"/>
           </button>
         </div>
@@ -23,7 +23,12 @@
 
 <script>
 export default {
-  name: 'app-log'
+  name: 'app-log',
+  methods: {
+    clear () {
+      this.$store.commit('CLEAR_LOG')
+    }
+  }
 }
 </script>
 
@@ -38,7 +43,8 @@ export default {
 }
 
 .log-area {
-  height: 300px;
+  height: 380px;
+  overflow-y: auto;
 
   .log {
     color: #777;
