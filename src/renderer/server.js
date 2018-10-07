@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
+const cors = require('cors')
 require('http-shutdown').extend()
 
 class Server {
@@ -9,7 +10,7 @@ class Server {
     this.started = false
   }
 
-  start (port, dir, root, listenCallback, routeCallback) {
+  start (config, listenCallback, loggerCallback) {
     if (this.started) {
       return
     }
@@ -17,10 +18,10 @@ class Server {
     let dirs = []
     let files = []
 
-    const list = fs.readdirSync(dir, 'utf-8')
+    const list = fs.readdirSync(config.dir, 'utf-8')
     list.forEach(el => {
       try {
-        let stat = fs.statSync(path.join(dir, el))
+        let stat = fs.statSync(path.join(config.dir, el))
         if (stat.isDirectory()) {
           dirs.push(el)
         } else if (stat.isFile()) {
@@ -30,18 +31,33 @@ class Server {
     })
 
     this.app = express()
+
+    if (config.cors) {
+      this.app.use(cors())
+      loggerCallback('Set CORS headers')
+    }
+
     this.app.use('*', (req, res, next) => {
-      routeCallback(res.req.method, res.req.originalUrl)
+      const afterResponse = () => {
+        res.removeListener('finish', afterResponse)
+        res.removeListener('close', afterResponse)
+        loggerCallback(`${res.req.method} ${res.statusCode} ${res.req.originalUrl}`)
+      }
+
+      res.on('finish', afterResponse)
+      res.on('close', afterResponse)
       next()
     })
 
+    this.app.use('', express.static(config.dir))
     dirs.forEach(d => {
-      this.app.use('/' + d, express.static(path.join(dir, d)))
+      this.app.use('/' + d, express.static(path.join(config.dir, d)))
     })
 
     this.app.get('/', (req, res) => {
-      fs.readFile(path.join(dir, root), (err, data) => {
+      fs.readFile(path.join(config.dir, config.root), (err, data) => {
         if (err) {
+          loggerCallback(`Can't read ${err.path.split('\\').pop()}`)
           res.send(`${err.path} 파일을 읽을 수 없습니다: (${err.errno})`)
         } else {
           res.writeHead(200, { 'Content-Type': 'text/html' })
@@ -51,18 +67,10 @@ class Server {
       })
     })
 
-    return http.createServer(this.app).listen(port, () => {
+    return http.createServer(this.app).listen(config.port, () => {
       this.started = true
       listenCallback()
     }).withShutdown()
-  }
-
-  close () {
-    if (this.started && this.server) {
-      this.server.close()
-      this.server = null
-      this.started = false
-    }
   }
 }
 

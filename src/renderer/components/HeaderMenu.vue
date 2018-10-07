@@ -2,7 +2,10 @@
   <transition name="menu" mode="out-in">
     <div id="header-menu">
       <div class="menu-item" @click="$emit('menuClick', 'home')">홈</div>
-      <div class="menu-item" @click="$emit('menuClick', 'log')">로그</div>
+      <div class="menu-item" @click="$emit('menuClick', 'log')">
+        로그
+        <span class="log-count">{{ $store.state.log.length }}</span>
+      </div>
       <div class="menu-item" @click="$emit('menuClick', 'info')">정보</div>
     </div>
   </transition>
@@ -31,6 +34,7 @@ export default {
 
   .menu-item {
     cursor: pointer;
+    position: relative;
     box-sizing: border-box;
     padding: 10px;
     transition: $transition-duration;
@@ -38,6 +42,17 @@ export default {
 
     &:hover {
       background-color: #eee;
+    }
+
+    .log-count {
+      position: absolute;
+      padding: 5px;
+      background-color: $main;
+      border-radius: 8px;
+      color: #fff;
+      float: right;
+      top: 5px;
+      right: 5px;
     }
   }
 }

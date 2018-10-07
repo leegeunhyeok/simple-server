@@ -17,6 +17,7 @@ export default new Vuex.Store({
     port: 8080,
     dir: '',
     root: 'index.html',
+    cors: false,
     server: null
   },
   mutations: {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     SET_ROOT (state, root) {
       state.root = root
+    },
+    SET_CORS (state, cors) {
+      state.cors = cors
     },
     SET_START_BUTTON_STATE (state, on) {
       state.start = on
@@ -53,11 +57,16 @@ export default new Vuex.Store({
       commit('WRITE_LOG', 'Starting server..')
       return new Promise((resolve, reject) => {
         setImmediate(() => {
-          const server = new Server().start(state.port, state.dir, state.root, () => {
+          const server = new Server().start({
+            port: state.port,
+            dir: state.dir,
+            root: state.dir,
+            cors: state.cors
+          }, () => {
             commit('START_SERVER', server)
             commit('WRITE_LOG', 'Server started')
-          }, (method, url) => {
-            commit('WRITE_LOG', `${method} ${url}`)
+          }, message => {
+            commit('WRITE_LOG', message)
           })
 
           if (server['listening']) {

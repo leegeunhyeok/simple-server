@@ -12,7 +12,7 @@
       </div>
       <br>
       <hr>
-      <div class="content log-area">
+      <div class="content log-area" id="log-area">
         <div class="log" v-for="(log, i) in $store.state.log" :key="i">
           {{ log }}
         </div>
@@ -24,9 +24,26 @@
 <script>
 export default {
   name: 'app-log',
+  computed: {
+    logLength () {
+      return this.$store.state.log.length
+    }
+  },
+  watch: {
+    logLength () {
+      this.scrollDown()
+    }
+  },
+  mounted () {
+    this.scrollDown()
+  },
   methods: {
     clear () {
       this.$store.commit('CLEAR_LOG')
+    },
+    scrollDown () {
+      const log = document.getElementById('log-area')
+      log.scrollTop = log.scrollHeight - log.clientHeight
     }
   }
 }

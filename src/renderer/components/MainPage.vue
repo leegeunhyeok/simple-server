@@ -56,14 +56,25 @@
           <input class="input" type="number" min="1" max="65535" placeholder="포트" v-model.number="$store.state.port" :disabled="start">
         </div>
       </div>
-    </div>
-    <div class="card">
-      <b>고급 설정</b>
       <div class="content">
         홈 파일 명
         <div class="right-area" style="margin-top: 0px;">
           <input type="text" class="input" placeholder="/" v-model.trim="$store.state.root" :disabled="start">
         </div>
+      </div>
+    </div>
+    <div class="card">
+      <b class="hover-info">
+        고급 설정
+        <div class="text">서버를 재시작해야 적용됩니다</div>
+      </b>
+      <div class="content hover-info">
+        CORS 헤더 설정
+        <div class="right-area">
+          <div :class="$store.state.cors ? 'toggle checked' : 'toggle'"></div>
+          <label style="margin: 0px;" @click="$store.commit('SET_CORS', !$store.state.cors)"></label>
+        </div>
+        <div class="text">다른 도메인으로 부터 HTTP 요청을 허용합니다</div>
       </div>
     </div>
   </div>
@@ -151,6 +162,54 @@ export default {
 .off {
   color: $red;
   transition: $transition-duration;
+}
+
+.hover-info {
+  position: relative;
+
+  .text {
+    pointer-events: none;
+    position: absolute;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: initial;
+    bottom: -36px;
+    width: 360px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-duration + 0.3;
+  }
+
+  &:hover .text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+#advanced {
+  position: relative;
+  transition: $transition-duration;
+
+  &:hover::before {
+    content: "서버를 재시작해야 적용됩니다";
+    text-align: center;
+    position: absolute;
+    font-weight: initial;
+    bottom: -30px;
+    width: 360px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    z-index: 9998;
+  }
 }
 
 </style>
