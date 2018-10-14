@@ -18,6 +18,11 @@ export default new Vuex.Store({
     dir: '',
     root: 'index.html',
     cors: false,
+    custom: false,
+    customPath: '',
+    customMethod: 'get',
+    customType: 'text/plain',
+    customData: '',
     server: null
   },
   mutations: {
@@ -38,6 +43,9 @@ export default new Vuex.Store({
     },
     SET_CORS (state, cors) {
       state.cors = cors
+    },
+    SET_CUSTOM (state, custom) {
+      state.custom = custom
     },
     SET_START_BUTTON_STATE (state, on) {
       state.start = on

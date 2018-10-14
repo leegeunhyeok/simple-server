@@ -1,4 +1,10 @@
+/**
+ * @class Logger class
+ */
 class Logger {
+  /**
+   * @description Create current time string
+   */
   currentTime () {
     const da = new Date()
     const y = da.getFullYear()
@@ -11,12 +17,17 @@ class Logger {
     return `${y}-${mo}-${d} ${h}:${mi}:${s}.${ms}`
   }
 
-  addZero (len, num) {
+  /**
+   * @description Add zeros to string
+   * @param {number} length
+   * @param {any} num
+   */
+  addZero (length, num) {
     num = num.toString()
-    if (num.length === len) {
+    if (num.lengthgth === length) {
       return num
     } else {
-      let less = len - num.length
+      let less = length - num.length
       let zeros = ''
       for (let i = 0; i < less; i++) {
         zeros += '0'

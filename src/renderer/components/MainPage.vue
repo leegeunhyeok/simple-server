@@ -76,6 +76,52 @@
         </div>
         <div class="text">다른 도메인으로 부터 HTTP 요청을 허용합니다</div>
       </div>
+      <div class="content hover-info">
+        사용자 정의 라우팅
+        <div class="right-area">
+          <div :class="$store.state.custom ? 'toggle checked' : 'toggle'"></div>
+          <label style="margin: 0px;" @click="$store.commit('SET_CUSTOM', !$store.state.custom)"></label>
+        </div>
+        <div :class="['collapse', 'custom', { 'hidden': !$store.state.custom }]">
+          <div class="sub-content">
+            <b>HTTP Method</b>
+            <div class="right-area" style="margin-top: 0px;">
+              <select v-model="$store.state.customMethod">
+                <option value="get">GET</option>
+                <option value="post">POST</option>
+                <option value="put">PUT</option>
+                <option value="delete">DELETE</option>
+              </select>
+            </div>
+          </div>
+          <div class="sub-content">
+            <b>Content-type</b>
+            <div class="right-area" style="margin-top: 0px;">
+              <select v-model="$store.state.customType">
+                <option value="text/plain">text/plain</option>
+                <option value="text/html">text/html</option>
+                <option value="application/json">application/json</option>
+                <option value="application/xml">application/xml</option>
+              </select>
+            </div>
+          </div>
+          <div class="sub-content">
+            <b>Path</b>
+            <div class="right-area" style="margin-top: 0px;">
+              <input class="input" type="text" min="1" max="10" placeholder="/example" v-model.trim="$store.state.customPath" :disabled="start">
+            </div>
+          </div>
+          <div class="sub-content">
+            <b>Data</b>
+            <br>
+            <textarea :placeholder="$store.state.customType + ' data'"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="content hover-info">
+        준비 중..
+        <div class="text">더 많은 기능은 준비 중 입니다..</div>
+      </div>
     </div>
   </div>
 </template>

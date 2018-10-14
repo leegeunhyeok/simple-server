@@ -110,6 +110,21 @@ html, body {
   background-color: #eee;
 }
 
+body {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgba(170, 170, 170, 0.5);
+  border-radius: 3px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -127,6 +142,24 @@ html, body {
   opacity: 0;
 }
 
+.collapse {
+  transition: all .6s ease-in-out;
+  height: auto;
+  overflow: hidden;
+  max-height: 500px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &.hidden {
+    max-height: 0px;
+  }
+}
+
+.custom {
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
 .card {
   border-radius: 5px;
   background-color: #fff;
@@ -138,11 +171,7 @@ html, body {
   transition: $transition-duration;
 
   .content {
-    margin-top: 10px;
-
-    .right-area {
-      margin-top: 5px;
-    }
+    margin: 10px 0;
 
     &:hover .hidden-content {
       max-height: 500px;
@@ -168,6 +197,11 @@ html, body {
       }
     }
   }
+}
+
+.sub-content {
+  margin: 10px 0;
+  width: 100%;
 }
 
 .card-button {
@@ -280,8 +314,30 @@ label:after {
 	transform: translateX(-100%);
 }
 
-::-webkit-scrollbar {
-  width: 0px;
+select {
+  padding: 2px;
+  border: 2px solid #ddd;
+  border-radius: 3px;
+  transition: $transition-duration;
+
+  &:focus {
+    border: 2px solid $main;
+  }
+
+  &:hover {
+    border: 2px solid $main;
+  }
+}
+
+textarea {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  resize: none;
+  padding: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 160px;
+  margin-top: 10px;
 }
 
 </style>
