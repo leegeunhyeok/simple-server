@@ -5,13 +5,13 @@
 # Simple Server
 간단하게 나만의 웹 서버를 시작해보세요!
 
-<img src="./icon.png">
+<img src="https://user-images.githubusercontent.com/26512984/54033213-08b02580-41f7-11e9-9bff-4bd92d9a1f1d.png">
 
 </div>
 
 # 사용법
 
-<img src="./intro.png">
+<img src="https://user-images.githubusercontent.com/26512984/54033216-0a79e900-41f7-11e9-9e55-db33d7611c3b.png">
 
 - ④ 서버 디렉토리 선택 버튼을 눌러 서버 파일(HTML, CSS, 이미지 등..)이 있는 디렉토리를 선택합니다.
 - ⑤, ⑥ 항목은 원하는 포트, 파일 명으로 변경 가능합니다.
