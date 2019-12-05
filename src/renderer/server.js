@@ -109,6 +109,26 @@ class Server {
     })
 
     /**
+     * Custom route with response
+     */
+    if (config.custom) {
+      const {
+        path,
+        method,
+        contentType,
+        data
+      } = config.custom
+
+      this.app[method](path, (req, res) => {
+        res.writeHead(200, { 'Content-Type': contentType })
+        res.write(data)
+        res.end()
+      })
+
+      loggerCallback(`Custom route enabled. [${method.toUpperCase()} ${path}] will be response ${contentType} type data`)
+    }
+
+    /**
      * Create express server and listen
      */
     return http.createServer(this.app).listen(config.port, () => {

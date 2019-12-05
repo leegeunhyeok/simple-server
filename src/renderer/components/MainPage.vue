@@ -114,7 +114,7 @@
           <div class="sub-content">
             <b>Data</b>
             <br>
-            <textarea :placeholder="$store.state.customType + ' data'"></textarea>
+            <textarea :placeholder="$store.state.customType + ' data'" v-model.trim="$store.state.customData"></textarea>
           </div>
         </div>
       </div>
@@ -154,6 +154,27 @@ export default {
         if (!this.$store.state.port) {
           this.$emit('alert', '포트를 입력해주세요')
           return
+        }
+        if (this.$store.state.custom) {
+          if (!this.$store.state.customPath) {
+            this.$emit('alert', '사용자정의 라우팅 경로를 입력해주세요')
+            return
+          }
+
+          if (!this.$store.state.customData) {
+            this.$emit('alert', '사용자정의 데이터를 추가해주세요')
+            return
+          }
+
+          if (this.$store.state.customType === 'application/json') {
+            try {
+              JSON.parse(this.$store.state.customData)
+            } catch (e) {
+              console.error(e)
+              this.$emit('alert', 'JSON 데이터 형식을 확인해주세요')
+              return
+            }
+          }
         }
         this.$emit('serverToggle')
       } else {

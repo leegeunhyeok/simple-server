@@ -69,7 +69,13 @@ export default new Vuex.Store({
             port: state.port,
             dir: state.dir,
             root: state.dir,
-            cors: state.cors
+            cors: state.cors,
+            custom: state.custom ? {
+              path: state.customPath,
+              method: state.customMethod,
+              contentType: state.customType,
+              data: state.customData
+            } : null
           }, () => {
             commit('START_SERVER', server)
             commit('WRITE_LOG', 'Server started')
