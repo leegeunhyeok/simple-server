@@ -1,6 +1,6 @@
 {
   "name": "simple-server",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "leegeunhyeok <lghlove0509@naver.com>",
   "description": "You can create simple web server",
   "main": "./dist/electron/main.js",
