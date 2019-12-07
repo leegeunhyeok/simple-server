@@ -91,10 +91,10 @@
             <div class="sub-text">{{ $store.state.apiList[i].file || '-' }}</div>
           </div>
           <div class="right-area" style="height: 30px;">
-            <button class="button red" @click="removeApi">
+            <button class="button red" @click="removeApi" :disabled="start">
               <fa-icon icon="minus"/>
             </button>
-            <button class="button green" @click="addApi">
+            <button class="button green" @click="addApi" :disabled="start">
               <fa-icon icon="plus"/>
             </button>
           </div>
@@ -111,7 +111,7 @@
           <div class="sub-content">
             <b>HTTP Method</b>
             <div class="right-area" style="margin-top: 0px;">
-              <select v-model="$store.state.customMethod">
+              <select v-model="$store.state.customMethod" :disabled="start">
                 <option value="get">GET</option>
                 <option value="post">POST</option>
                 <option value="put">PUT</option>
@@ -122,7 +122,7 @@
           <div class="sub-content">
             <b>Content-type</b>
             <div class="right-area" style="margin-top: 0px;">
-              <select v-model="$store.state.customType">
+              <select v-model="$store.state.customType" :disabled="start">
                 <option value="text/plain">text/plain</option>
                 <option value="text/html">text/html</option>
                 <option value="application/json">application/json</option>
@@ -139,7 +139,7 @@
           <div class="sub-content">
             <b>Data</b>
             <br>
-            <textarea :placeholder="$store.state.customType + ' data'" v-model.trim="$store.state.customData"></textarea>
+            <textarea :placeholder="$store.state.customType + ' data'" v-model.trim="$store.state.customData" :disabled="start"></textarea>
           </div>
         </div>
         <div class="text">지정한 데이터를 응답합니다</div>
