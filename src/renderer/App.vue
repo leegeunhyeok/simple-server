@@ -223,7 +223,7 @@ body::-webkit-scrollbar-thumb {
   transition: $transition-duration;
 
   &.default {
-    color: #fff;
+    color: #000;
     background-color: #fff;
 
     &:hover {
