@@ -76,6 +76,30 @@
         </div>
         <div class="text">다른 도메인으로 부터 HTTP 요청을 허용합니다</div>
       </div>
+       <div class="content hover-info">
+        심플 API 기능
+        <div class="right-area">
+          <div :class="$store.state.api ? 'toggle checked' : 'toggle'"></div>
+          <label style="margin: 0px;" @click="$store.commit('SET_API', !$store.state.api)"></label>
+        </div>
+        <div :class="['collapse', 'custom', { 'hidden': !$store.state.api }]">
+          <div class="sub-content" v-for="(api, i) in $store.state.apiList" :key="i">
+            <button class="button default" @click="chooseDirectory" :disabled="start">JSON 파일 선택</button>
+            <div class="right-area" style="margin-top: 0px;">
+              GET /api<input type="text" class="input" placeholder="/example" v-model.trim="$store.state.apiList[i].path" :disabled="start">
+            </div>
+          </div>
+          <div class="right-area" style="height: 30px;">
+            <button class="button red" @click="removeApi">
+              <fa-icon icon="minus"/>
+            </button>
+            <button class="button green" @click="addApi">
+              <fa-icon icon="plus"/>
+            </button>
+          </div>
+        </div>
+        <div class="text">지정한 JSON 데이터를 응답합니다</div>
+      </div>
       <div class="content hover-info">
         사용자 정의 라우팅
         <div class="right-area">
@@ -202,6 +226,22 @@ export default {
           }
         })
       }
+    },
+    removeApi () {
+      if (this.$store.state.apiList.length === 1) {
+        this.$emit('alert', 'API는 최소 1개가 존재해야 합니다')
+        return
+      }
+
+      this.$store.commit('REMOVE_API')
+    },
+    addApi () {
+      if (this.$store.state.apiList.length >= 10) {
+        this.$emit('alert', 'API는 최대 10개 등록 가능합니다')
+        return
+      }
+
+      this.$store.commit('ADD_API')
     },
     open (link) {
       console.log(link)

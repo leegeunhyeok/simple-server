@@ -223,10 +223,28 @@ body::-webkit-scrollbar-thumb {
   transition: $transition-duration;
 
   &.default {
+    color: #fff;
     background-color: #fff;
 
     &:hover {
       background-color: #eee;
+    }
+  }
+
+  &.green {
+    color: #fff;
+    background-color: $green;
+
+    &:hover {
+      background-color: darken($green, 5%);
+    }
+  }
+
+  &.red {
+    background-color: $red;
+
+    &:hover {
+      background-color: darken($red, 5%);
     }
   }
 
