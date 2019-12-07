@@ -20,7 +20,7 @@ export default new Vuex.Store({
     cors: false,
     api: false,
     apiList: [
-      { path: '', file: '', data: null }
+      { path: '', file: '' }
     ],
     custom: false,
     customPath: '',
@@ -55,14 +55,13 @@ export default new Vuex.Store({
       state.api = api
     },
     ADD_API (state) {
-      state.apiList.push({ path: '', file: '', data: null })
+      state.apiList.push({ path: '', file: '' })
     },
     REMOVE_API (state) {
       state.apiList.pop()
     },
-    SET_API_PATH (state, { index, file, data }) {
+    SET_API_PATH (state, { index, file }) {
       state.apiList[index].file = file
-      state.apiList[index].data = data
     },
     SET_START_BUTTON_STATE (state, on) {
       state.start = on

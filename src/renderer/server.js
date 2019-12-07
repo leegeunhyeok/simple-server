@@ -113,7 +113,17 @@ class Server {
 
       list.forEach((apiInfo, idx) => {
         this.app.get('/api' + apiInfo.path, (req, res) => {
-          res.json(apiInfo.data)
+          fs.readFile(apiInfo.file, 'utf8', (err, data) => {
+            if (err) {
+              res.json({ err })
+            } else {
+              try {
+                res.json(JSON.parse(data))
+              } catch (e) {
+                res.json({ err: e })
+              }
+            }
+          })
         })
 
         loggerCallback(`API #${idx + 1} Enabled - GET /api${apiInfo.path}`)

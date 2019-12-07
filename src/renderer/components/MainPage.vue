@@ -248,8 +248,8 @@ export default {
             this.$emit('alert', '파일을 읽을 수 없습니다')
           } else {
             try {
-              const jsonData = JSON.parse(data)
-              this.$store.commit('SET_API_PATH', { index: apiIndex, file: dir[0], data: jsonData })
+              JSON.parse(data)
+              this.$store.commit('SET_API_PATH', { index: apiIndex, file: dir[0] })
             } catch (e) {
               this.$emit('alert', 'JSON 데이터 형식을 확인해주세요')
             }
