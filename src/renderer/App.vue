@@ -251,10 +251,12 @@ body::-webkit-scrollbar-thumb {
   &:disabled {
     cursor: not-allowed;
     background-color: #eee;
+    color: #000;
   }
 
   &:disabled:hover {
     background-color: #eee;
+    color: #000;
   }
 }
 
@@ -333,6 +335,7 @@ label:after {
 }
 
 select {
+  cursor: pointer;
   padding: 2px;
   border: 2px solid #ddd;
   border-radius: 3px;
@@ -344,6 +347,22 @@ select {
 
   &:hover {
     border: 2px solid $main;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #eee;
+    border: 2px solid #ddd;
+  }
+
+  &:disabled:hover {
+    background-color: #eee;
+    border: 2px solid #ddd;
+  }
+
+  &:disabled:focus {
+    background-color: #eee;
+    border: 2px solid #ddd;
   }
 }
 
