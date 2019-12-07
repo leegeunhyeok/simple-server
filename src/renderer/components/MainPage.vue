@@ -144,10 +144,6 @@
         </div>
         <div class="text">지정한 데이터를 응답합니다</div>
       </div>
-      <div class="content hover-info">
-        준비 중..
-        <div class="text">더 많은 기능은 준비 중 입니다..</div>
-      </div>
     </div>
   </div>
 </template>
