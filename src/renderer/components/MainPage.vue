@@ -181,6 +181,14 @@ export default {
           this.$emit('alert', '포트를 입력해주세요')
           return
         }
+        if (this.$store.state.api) {
+          for (let apiInfo of this.$store.state.apiList) {
+            if (!apiInfo.path || !apiInfo.file) {
+              this.$emit('alert', 'JSON 파일 선택 또는 API 경로를 입력해주세요')
+              return
+            }
+          }
+        }
         if (this.$store.state.custom) {
           if (!this.$store.state.customPath) {
             this.$emit('alert', '사용자정의 라우팅 경로를 입력해주세요')
