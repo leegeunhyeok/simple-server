@@ -108,6 +108,18 @@ class Server {
       })
     })
 
+    if (config.api) {
+      const { list } = config.api
+
+      list.forEach((apiInfo, idx) => {
+        this.app.get('/api' + apiInfo.path, (req, res) => {
+          res.json(apiInfo.data)
+        })
+
+        loggerCallback(`API #${idx + 1} Enabled - GET /api${apiInfo.path}`)
+      })
+    }
+
     /**
      * Custom route with response
      */
