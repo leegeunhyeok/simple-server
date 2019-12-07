@@ -1,7 +1,6 @@
 {
   "name": "simple-server",
-  "version": "0.1.0",
-  "author": "leegeunhyeok <lghlove0509@naver.com>",
+  "version": "0.2.0",
   "description": "You can create simple web server",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -20,6 +19,16 @@
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leegeunhyeok/simple-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leegeunhyeok/simple-server/issues"
+  },
+  "homepage": "https://github.com/leegeunhyeok/simple-server#readme",
+  "author": "leegeunhyeok <lghlove0509@naver.com> (https://github.com/leegeunhyeok)",
+  "license": "MIT",
   "build": {
     "productName": "Simple Server",
     "appId": "com.leegeunhyeok.simple-server",
@@ -124,7 +133,7 @@
     "mocha": "^5.2.0",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
-    "node-sass": "^4.9.2",
+    "node-sass": "^4.13.0",
     "require-dir": "^1.0.0",
     "sass-loader": "^7.0.3",
     "spectron": "^3.8.0",

@@ -2,7 +2,7 @@
   <div id="info">
     <img src="@/assets/logo.png">
     <h2>Simple Server</h2>
-    <b>Release v0.1.0</b>
+    <b>Release v0.2.0</b>
     <div class="items">
       <div class="item">
         Vue.js: <b class="version">{{ vue }}</b>
