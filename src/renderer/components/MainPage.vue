@@ -84,10 +84,11 @@
         </div>
         <div :class="['collapse', 'custom', { 'hidden': !$store.state.api }]">
           <div class="sub-content" v-for="(api, i) in $store.state.apiList" :key="i">
-            <button class="button default" @click="chooseDirectory" :disabled="start">JSON 파일 선택</button>
+            <button class="button default" @click="selectJsonFile(i)" :disabled="start">JSON 파일 선택</button>
             <div class="right-area" style="margin-top: 0px;">
               GET /api<input type="text" class="input" placeholder="/example" v-model.trim="$store.state.apiList[i].path" :disabled="start">
             </div>
+            <div class="sub-text">{{ $store.state.apiList[i].file || '-' }}</div>
           </div>
           <div class="right-area" style="height: 30px;">
             <button class="button red" @click="removeApi">
@@ -141,6 +142,7 @@
             <textarea :placeholder="$store.state.customType + ' data'" v-model.trim="$store.state.customData"></textarea>
           </div>
         </div>
+        <div class="text">지정한 데이터를 응답합니다</div>
       </div>
       <div class="content hover-info">
         준비 중..
@@ -223,6 +225,30 @@ export default {
             //   this.$emit('alert', '디렉토리에 index.html이 없습니다')
             // }
             this.$store.commit('SET_DIRECTORY', dir[0])
+          }
+        })
+      }
+    },
+    selectJsonFile (apiIndex) {
+      const dir = this.$electron.remote.dialog.showOpenDialog({
+        properties: ['openFile'],
+        title: 'API 응답 데이터 선택',
+        filters: [
+          { name: 'JSON', extensions: ['json'] }
+        ]
+      })
+
+      if (dir) {
+        fs.readFile(dir[0], (err, data) => {
+          if (err) {
+            this.$emit('alert', '파일을 읽을 수 없습니다')
+          } else {
+            try {
+              JSON.parse(data)
+              this.$store.commit('SET_API_PATH', { index: apiIndex, file: dir[0] })
+            } catch (e) {
+              this.$emit('alert', 'JSON 데이터 형식을 확인해주세요')
+            }
           }
         })
       }
@@ -317,6 +343,12 @@ export default {
     border-radius: 8px;
     z-index: 9998;
   }
+}
+
+.sub-text {
+  margin: 5px 0;
+  color: #aaa;
+  font-size: .8rem;
 }
 
 </style>

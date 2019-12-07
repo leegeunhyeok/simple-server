@@ -60,6 +60,9 @@ export default new Vuex.Store({
     REMOVE_API (state) {
       state.apiList.pop()
     },
+    SET_API_PATH (state, { index, file }) {
+      state.apiList[index].file = file
+    },
     SET_START_BUTTON_STATE (state, on) {
       state.start = on
     },
